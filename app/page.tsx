@@ -1,65 +1,95 @@
-import Image from "next/image";
+'use client';
+import { useState } from 'react';
 
 export default function Home() {
+  const [bill, setBill] = useState(''); 
+  const [tipPercentage, setTipPercentage] = useState(''); 
+  const [results, setResults] = useState({ tip: 0, total: 0 }); 
+
+  const handleCalculate = () => {
+    const billAmount = parseFloat(bill) || 0; 
+    const tipPercent = parseFloat(tipPercentage) || 0;
+    
+    const tipAmount = billAmount * (tipPercent / 100);
+    const totalAmount = billAmount + tipAmount;
+
+    setResults({
+      tip: tipAmount,
+      total: totalAmount,
+    });
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+    <div className="min-h-screen flex flex-col items-center justify-center bg-white p-4">
+      
+      <h1 className="text-4xl font-bold text-blue-600 mb-8">Tip Calculator</h1>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl">
+        
+        
+        <div className="space-y-6">
+          
+          
+          <div className="flex items-center gap-4">
+            <label className="text-4xl font-bold text-black w-24">bill</label>
+            <input
+              type="number"
+              step="0.01"
+              value={bill}
+              onChange={(e) => setBill(e.target.value)}
+              
+              className="w-full bg-yellow-400 text-black text-2xl font-bold p-3 text-center rounded-sm outline-none placeholder-gray-600/50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+              placeholder="100.00"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          </div>
+
+          \
+          <div className="flex items-center gap-4">
+            <label className="text-4xl font-bold text-black w-24">Tip</label>
+            <div className="relative w-full">
+              <input
+                type="number"
+                step="0.01"
+                value={tipPercentage}
+                onChange={(e) => setTipPercentage(e.target.value)}
+                
+                className="w-full bg-sky-300 text-black text-2xl font-bold p-3 text-center rounded-sm outline-none placeholder-gray-600/50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                placeholder="ระบุ %"
+              />
+            </div>
+          </div>
+
+          
+          <div className="pl-28"> 
+             <button
+              onClick={handleCalculate}
+              className="w-full bg-teal-200 hover:bg-teal-300 text-black text-2xl font-bold py-4 rounded-sm shadow-sm transition-colors"
+            >
+              Calculate
+            </button>
+          </div>
         </div>
-      </main>
+
+      
+        <div className="space-y-6 flex flex-col justify-start pt-2">
+          
+          <div className="flex items-center gap-4">
+            <label className="text-3xl font-bold text-black whitespace-nowrap w-40 text-right">Tip Total</label>
+            <div className="w-full bg-pink-200 text-black text-3xl font-bold p-4 text-center rounded-sm">
+              {results.tip.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} 
+            </div>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <label className="text-3xl font-bold text-black whitespace-nowrap w-40 text-right">Bill Total</label>
+            <div className="w-full bg-pink-200 text-black text-3xl font-bold p-4 text-center rounded-sm">
+              {results.total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </div>
+          </div>
+
+        </div>
+      </div>
+      
     </div>
   );
 }
